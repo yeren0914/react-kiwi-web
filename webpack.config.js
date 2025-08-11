@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 
 module.exports = {
     entry: './src/index.tsx',
@@ -11,7 +13,7 @@ module.exports = {
         clean: true,
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js'],
+        extensions: ['.ts', '.tsx', '.js', 'css'],
         alias: {
             '@': path.resolve(__dirname, 'src/'),
             '@kasplex': path.resolve(__dirname, 'node_modules/@kasplex')
@@ -28,6 +30,13 @@ module.exports = {
                 use: 'ts-loader',
                 exclude: /node_modules/,
             },
+            {
+                    test: /\.css$/,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        'css-loader',
+                    ]
+                },
             {
                 test: /\.wasm$/,
                 type: 'asset/inline',
@@ -51,6 +60,10 @@ module.exports = {
             filename: 'index.html',
             inject: 'body',
             chunks: ['main']
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css',
         }),
         new CopyWebpackPlugin({
             patterns: [

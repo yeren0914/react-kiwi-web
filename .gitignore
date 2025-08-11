@@ -23,4 +23,5 @@ dist
 *.sw?
 *.tgz
 package-lock.json
+build
 /tests
